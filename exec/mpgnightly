@@ -1,0 +1,19 @@
+#!/bin/sh
+
+export HOME=/home/lachaume
+export PYTHONPATH=$HOME/python
+TEL=2.2m
+PER=103
+NEWPER=103
+
+DIR=${HOME}/Work/2.2m/nightlogs
+LOG=${DIR}/${TEL}/P${PER}/`date +"%Y-%m-%d.log"`
+
+$HOME/bin/mpgschedule --parse --publish ${NEWPER} > ${LOG} 2>&1
+
+$HOME/bin/mpgprograms --parse --publish $NEWPER >> ${LOG} 2>&1
+
+$HOME/bin/mpglogs --overwrite-last-nights --summary --publish --overwrite-period-log --telescope 2.2m $PER >> ${LOG} 2>&1
+
+$HOME/bin/mpgcopymanual >> ${LOG} 2>&1
+

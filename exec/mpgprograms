@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-.
+
+import sys
+sys.path.append('/home/lachaume/Dropbox/python/')
+
+
+from MPG.programlist import ProgramList
+from MPG.utils import argparser
+
+ 
+if __name__ == "__main__":
+    parser = argparser(
+        description='Program parser for the MPG 2.2m telescope',
+        wwwsubdir='programs'
+    )
+    parser.add_argument('period', nargs='+',
+        help='ESO period(s)',
+        action='store', type=int)
+    parser.add_argument('--parse', action='store_true', default=False,
+        help='Parse excel program list and write a nice HTML one')
+    arg = parser.parse_args()
+    path, tel, rdir = arg.dir, arg.tel, arg.rdir
+    print(arg.rdir)
+    for period in arg.period: 
+        programs = ProgramList(tel=tel, period=period, path=path)
+        if arg.parse:
+            programs.save_as_html()
+        if arg.publish:
+            programs.publish_to(rdir)
+
+  
