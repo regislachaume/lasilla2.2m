@@ -3,9 +3,9 @@
 ## Version of Feb 12 2016
 
 import sys
-sys.path.append('/home/lachaume/Dropbox/python/')
-
 import os
+sys.path.append(os.path.join(os.environ['HOME'], 'python'))
+
 import re
 import datetime
 from MPG.esolog import PeriodLog, NightLog

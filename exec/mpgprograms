@@ -2,7 +2,8 @@
 # -*- coding: UTF-8 -*-.
 
 import sys
-sys.path.append('/home/lachaume/Dropbox/python/')
+import os
+sys.path.append(os.path.join(os.environ['HOME'], 'python'))
 
 
 from MPG.programlist import ProgramList
