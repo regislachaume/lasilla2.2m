@@ -64,10 +64,10 @@ class prog_sort:
         self.mon = mon
     def __call__(self, p):
         if p in re.split(', *', self.mon['daily']):
-            return 2
+            return 1
         if p == 'Calib':
             return 0
-        return 1
+        return 2
 
 def merge_cells(row, config, night_length=8):
     # add specified daily monitoring programmes
@@ -380,12 +380,15 @@ def get_prog_html(x, programs, indent=3, cr='\n'):
     html = ('    ' * indent) + html + cr
     return html
 
-def publish_html_schedule(tel, period, rdir='lachaume@black:~/2.2m', path='.'):
+def publish_html_schedule(tel, period, xlsext='xlsx', rdir='lachaume@black:~/2.2m', path='.'):
     sched = get_schedule_name(tel, period, format='html', path=path)
+    xls = get_schedule_name(tel, period, format=xlsext, path=path)
     shift = get_shift_name(tel, period, path=path)
     cmd = 'scp {} {}/schedule/P{}'.format(sched, rdir, period)
     os.system(cmd)
     cmd = 'scp {} {}/support/P{}'.format(shift, rdir, period)
+    os.system(cmd)
+    cmd = 'scp {} {}/support/P{}'.format(xls, rdir, period)
     os.system(cmd)
 
 def retrieve_xls_schedule(tel, period, path='.'):
