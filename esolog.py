@@ -173,6 +173,9 @@ class BasicLog(Table):
         columns = self.keywords.columns
         names = columns['name'].tolist()
         types = columns['type'].tolist()
+        self.primary_key = None
+        self._copy_indices = True
+        self._init_indices = True
         if 'copy' not in kwarg or kwarg['copy'] is True:
             kwarg['dtype'] = types
             kwarg['names'] = names

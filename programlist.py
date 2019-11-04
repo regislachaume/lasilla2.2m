@@ -124,5 +124,4 @@ class ProgramList(numpy.ndarray):
         os.system('scp -r {} {}/proposals {}'.format(filename, path, rdir))
 
 
-
 from MPG.esolog import BasicLog

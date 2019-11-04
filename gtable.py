@@ -115,6 +115,9 @@ class AsciiWithGroupsData(fixedwidth.FixedWidthTwoLineData):
         return [col.str_vals for col in self.cols]
  
 class AsciiWithGroups(ascii.FixedWidthTwoLine):
+    """Fixed wdith table with two header lines and row groups.
+
+    """
     _format_name = 'ascii_with_groups'
     _description = 'Fixed width ascii table handling row groups'
     data_class = AsciiWithGroupsData
@@ -230,6 +233,7 @@ class HTMLWithGroupsInputter(html.HTMLInputter):
 
 
 class HTMLWithGroups(html.HTML):
+    """HTML table with row groups"""
     data_class = HTMLWithGroupsData
     inputter_class = HTMLWithGroupsInputter
     _format_name = 'html_with_groups'
@@ -413,6 +417,7 @@ class Table(table.Table):
     def __init__(self, *arg, rows=None, **kwarg):
         if rows == []:
             rows = None
+        self.meta['primary_key'] = None
         super().__init__(*arg, rows=rows, **kwarg)
     
         
