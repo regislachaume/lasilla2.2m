@@ -591,23 +591,24 @@ class BasicLog(Table):
                 prevrow = row
                 #j = i 
     def flag_internal_obs(self):
-        # Try to find internal calibrations
-        #  1. No telescope tracking except when on flat field screen
-        #  2. All templates of an OB are internal calibrations
-        # Decide that all internal and flat field integration are without
-        # tracking, i.e. they are not on-sky obervations.
+        # Try to find internal calibrations, by observing that either
+        #  1. There is no telescope tracking except when on flat field screen
         missingtcs = self['track'] == 'N/A'
-        self['track'][missingtcs] == 'NORMAL'
-        internal = (self['track'] == 'OFF') * (self['obs_type'] != 'FLAT,SCREEN') 
+        self['track'][missingtcs] = 'NORMAL'
+        failtcs = self['track'] == 'TCSFAIL'
+        self['track'][failtcs] = 'OFF' 
+        obs_type = self['obs_type']
+        internal = (self['track'] == 'OFF') * (obs_type != 'FLAT,SCREEN') 
         self['target'][internal] = 'INTERNAL'
         self['internal'][internal] = True 
         screen = (self['obs_type'] == 'FLAT,SCREEN')
         self['target'][screen] = 'SCREEN'
         self['track'][screen] = 'OFF'
+        #  2. All templates of an OB are internal calibrations
         internal_type = numpy.atleast_2d(['DARK', 'BIAS', 'FLAT', 'WAVE']).T
         for ob in numpy.unique(self['ob_start']):
             index = self['ob_start'] == ob
-            typ = numpy.atleast_2d(self['obs_type'][index])
+            typ = numpy.atleast_2d([t.strip() for t in self['obs_type'][index]])
             if all(numpy.sum(typ == internal_type, axis=0)):
                 self['target'][index] = 'INTERNAL'
                 self['track'][index] = 'OFF'
@@ -627,6 +628,8 @@ class BasicLog(Table):
                 if date == 'DUMMY' and row['end'] == 'DUMMY':
                     continue
                 p = progs.lookup(pid, target=target, date=date, ins=ins)
+                if pid == '0104.A-9099(A)':
+                    print(pid, target, p)
                 row['pi'] =  p['Surname'] 
                 if (p['Name'] not in ['', 'N/A'] 
                         and p['Surname'] not in ['', 'N/A']):
@@ -862,9 +865,9 @@ class NightLog(SinglePeriodLog):
         log.set_night(night)
         log.flag_internal_obs()
         log.sort()
-        #log.fix_pids()
-        #log.fix_targets()
-        #log.fix_filters()
+        log.fix_pids()
+        log.fix_targets()
+        log.fix_filters()
         log.fill_gaps()
         log.set_night(night)
         return log
