@@ -3,8 +3,8 @@
 export HOME=/home/lachaume
 export PYTHONPATH=$HOME/python
 TEL=2.2m
-PER=103
-NEWPER=103
+PER=104
+NEWPER=104
 
 DIR=${HOME}/Work/2.2m/nightlogs
 LOG=${DIR}/${TEL}/P${PER}/`date +"%Y-%m-%d.log"`
